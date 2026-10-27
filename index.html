@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; media-src 'self' data: blob:; connect-src 'self' data: blob:; worker-src 'self' blob:; manifest-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Whiteboard — Free Online Drawing Board That Saves Itself | S3eidat Tools</title>
+<meta name="description" content="A simple online whiteboard: pen with pressure, highlighter, eraser, lines, arrows, boxes, ellipses and text, select and move, undo, pan and zoom, grid, light or dark board, PNG and SVG export. Several boards, saved in your browser. Free and private.">
+<meta property="og:title" content="Whiteboard — a drawing board that saves itself">
+<meta property="og:description" content="Draw, sketch and diagram with export to PNG and SVG. Runs 100% in your browser.">
+<link rel="icon" href="kit/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="kit/kit.css">
+<link rel="stylesheet" href="app.css">
+<script src="kit/kit.js"></script>
+<!--s3:seo-->
+<link rel="canonical" href="https://s3eidat.github.io/whiteboard/">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d0f12">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="S3eidat Tools">
+<meta property="og:url" content="https://s3eidat.github.io/whiteboard/">
+<meta property="og:image" content="https://s3eidat.github.io/whiteboard/screenshot.png">
+<meta property="og:image:width" content="1280"><meta property="og:image:height" content="800">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Whiteboard — A simple drawing board that saves itself">
+<meta name="twitter:description" content="A simple drawing board that saves itself. Free, private and runs 100% in your browser: no sign-up, no uploads.">
+<meta name="twitter:image" content="https://s3eidat.github.io/whiteboard/screenshot.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Whiteboard", "url": "https://s3eidat.github.io/whiteboard/", "description": "A simple drawing board that saves itself. Free, private and runs 100% in your browser: no sign-up, no uploads.", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "image": "https://s3eidat.github.io/whiteboard/screenshot.png", "author": {"@type": "Person", "name": "s3eidat", "url": "https://github.com/s3eidat"}}</script>
+<!--/s3:seo-->
+</head>
+<body data-tool="whiteboard">
+<main class="s3-main wb-main">
+  <section class="s3-hero wb-hero">
+    <h1>Whiteboard</h1>
+    <p>Sketch, plan and explain. Everything saves itself in this browser, and you can keep several boards.</p>
+  </section>
+
+  <div class="wb-bar card">
+    <div class="wb-tools" id="tools" role="toolbar" aria-label="Tools"></div>
+    <span class="wb-sep"></span>
+    <div class="wb-colors" id="colors" role="group" aria-label="Colour"></div>
+    <span class="wb-sep"></span>
+    <div class="seg wb-widths" id="widths" role="group" aria-label="Stroke width">
+      <button aria-pressed="false" data-v="2" title="Thin"><i style="--w:2px"></i></button>
+      <button aria-pressed="true" data-v="4" title="Medium"><i style="--w:4px"></i></button>
+      <button aria-pressed="false" data-v="8" title="Thick"><i style="--w:7px"></i></button>
+      <button aria-pressed="false" data-v="16" title="Extra thick"><i style="--w:11px"></i></button>
+    </div>
+    <span class="wb-sep"></span>
+    <button class="btn icon small" id="undo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
+    <button class="btn icon small" id="redo" title="Redo (Ctrl+Y)" aria-label="Redo">↷</button>
+    <button class="btn icon small" id="del" title="Delete selection (Del)" aria-label="Delete selection" disabled><svg class="i"><use href="#i-trash"/></svg></button>
+  </div>
+
+  <div class="wb-stage" id="stage">
+    <canvas id="cv" aria-label="Drawing board"></canvas>
+    <textarea class="wb-text" id="textIn" dir="auto" hidden aria-label="Text"></textarea>
+    <div class="wb-zoom">
+      <button class="btn icon small" id="zoomOut" aria-label="Zoom out">−</button>
+      <button class="btn small" id="zoomReset" title="Reset view">100%</button>
+      <button class="btn icon small" id="zoomIn" aria-label="Zoom in">+</button>
+      <button class="btn small" id="fit" title="Fit drawing to screen">Fit</button>
+    </div>
+    <div class="wb-empty" id="empty">Pick the pen and draw · <kbd>Space</kbd>+drag or two fingers to pan · <kbd>Ctrl</kbd>+scroll to zoom</div>
+  </div>
+
+  <div class="wb-bottom row between">
+    <div class="row">
+      <label class="sr" for="boardPick">Board</label>
+      <select class="select wb-pick" id="boardPick"></select>
+      <button class="btn ghost small" id="boardNew"><svg class="i"><use href="#i-plus"/></svg>New board</button>
+      <button class="btn ghost small" id="boardRename">Rename</button>
+      <button class="btn ghost small" id="boardDel"><svg class="i"><use href="#i-trash"/></svg>Delete board</button>
+    </div>
+    <div class="row">
+      <label class="check"><input type="checkbox" id="grid"> Grid</label>
+      <div class="seg" id="bg" role="group" aria-label="Board colour">
+        <button aria-pressed="true" data-v="dark">Dark</button>
+        <button aria-pressed="false" data-v="light">Light</button>
+      </div>
+      <button class="btn ghost small" id="clear">Clear board</button>
+      <button class="btn small" id="svg"><svg class="i"><use href="#i-download"/></svg>SVG</button>
+      <button class="btn small primary" id="png"><svg class="i"><use href="#i-image"/></svg>PNG</button>
+    </div>
+  </div>
+  <p class="faint wb-saved" id="saved"></p>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

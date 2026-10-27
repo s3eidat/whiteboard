@@ -1,0 +1,43 @@
+.wb-main { --maxw: 1400px; }
+.wb-hero { padding: 20px 0 12px; }
+.wb-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 14px; }
+.wb-tools { display: flex; flex-wrap: wrap; gap: 2px; }
+.wb-tool[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.wb-tool svg.i { width: 18px; height: 18px; }
+.wb-sep { width: 1px; height: 24px; background: var(--line-strong); margin: 0 4px; }
+.wb-colors { display: flex; flex-wrap: wrap; gap: 4px; }
+.wb-color { width: 24px; height: 24px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px var(--surface); border: 1px solid var(--line-strong); }
+.wb-color.ink { background: linear-gradient(135deg, #111827 50%, #eceef2 50%); }
+.wb-color[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent); }
+.wb-widths button { width: 34px; display: grid; place-items: center; padding: 6px 0; }
+.wb-widths i { display: block; width: 16px; height: var(--w); border-radius: 9px; background: currentColor; }
+#undo, #redo { font-size: 18px; }
+
+.wb-stage {
+  position: relative; margin-top: 10px; height: max(420px, calc(100vh - 250px)); border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--line-strong); background: #15181c; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.wb-stage canvas { display: block; cursor: crosshair; touch-action: none; }
+.wb-stage[data-tool="select"] canvas { cursor: default; }
+.wb-stage[data-tool="hand"] canvas, .wb-stage.panning canvas { cursor: grab; }
+.wb-stage[data-tool="text"] canvas { cursor: text; }
+.wb-stage[data-tool="eraser"] canvas { cursor: cell; }
+.wb-text {
+  position: absolute; z-index: 3; min-height: 1.5em; padding: 0; margin: 0; border: 1px dashed #3dd6d0; border-radius: 4px; background: transparent;
+  font-family: Inter, system-ui, sans-serif; font-weight: 500; line-height: 1.25; resize: none; outline: none; overflow: hidden; white-space: pre;
+}
+.wb-zoom { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: color-mix(in srgb, var(--surface) 88%, transparent); border: 1px solid var(--line); }
+.wb-zoom .btn { min-width: 30px; }
+#zoomReset { min-width: 58px; font-variant-numeric: tabular-nums; }
+.wb-empty { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); color: #8a929d; font-size: 14px; text-align: center; pointer-events: none; padding: 0 16px; width: max-content; max-width: 90%; }
+.wb-stage.light .wb-empty { color: #7d8693; }
+
+.wb-bottom { margin-top: 10px; gap: 8px; }
+.wb-pick { width: auto; min-width: 150px; min-height: 32px; height: 32px; padding-top: 0; padding-bottom: 0; font-size: 13px; }
+.wb-saved { margin: 8px 0 0; }
+.wb-saved.bad { color: var(--danger); }
+@media (max-width: 560px) {
+  .wb-sep { display: none; }
+  .wb-stage { height: 60vh; }
+  .wb-zoom #fit { display: none; }
+}
